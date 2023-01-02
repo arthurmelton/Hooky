@@ -1,0 +1,19 @@
+on:
+  push:
+    branches:
+        - __mirror
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    name: mirror
+    steps:
+      - name: mirror
+        id: mirror
+        uses: kaidokert/github-mirror-action@v2
+        with:
+          origin: 'https://git.arthurmelton.com/hooky'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
