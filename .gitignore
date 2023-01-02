@@ -1,5 +1,6 @@
 /target
 /victim/target
+/victim/config.toml
 
 # Added by cargo
 #

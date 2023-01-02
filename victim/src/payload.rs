@@ -5,7 +5,7 @@ use tempfile::NamedTempFile;
 #[cfg(target_os = "windows")]
 use tempfile::Builder;
 
-const PAYLOAD: &[u8] = include_bytes!("../run");
+const PAYLOAD: &[u8] = include_bytes!(env!("payload"));
 
 pub fn run() -> Result<(), std::io::Error> {
     #[cfg(not(target_os = "windows"))]
