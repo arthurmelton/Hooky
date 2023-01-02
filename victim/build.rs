@@ -1,11 +1,7 @@
 use std::io::prelude::*;
 use std::fs::File;
-use serde_derive::Deserialize;
 
-#[derive(Deserialize)]
-struct Config {
-    payload: Option<String>,
-}
+use config::Config;
 
 fn main() {
     println!("cargo:rerun-if-changed=config.toml");

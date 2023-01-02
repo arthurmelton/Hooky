@@ -3,11 +3,11 @@
     windows_subsystem = "windows"
 )]
 
-#[cfg(payload)]
+#[cfg(feature = "payload")]
 mod payload;
 
 fn main() -> Result<(), std::io::Error> {
-    #[cfg(payload)]
+    #[cfg(feature = "payload")]
     payload::run()?;
     Ok(())
 }
