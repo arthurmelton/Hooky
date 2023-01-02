@@ -15,4 +15,11 @@
 
 ### Running
 
-Download the `zip`/`tar` of the latest build at the [Releases](https://github.com/AMTitan/Hooky/releases) tab. Unzip the folder and put it somewhere. Open a terminal in the folder called `command` and run `cargo run --release`.
+Download the `zip`/`tar` of the latest build at the [Releases](https://github.com/AMTitan/Hooky/releases) tab. Unzip the folder and put it somewhere. Open a terminal in the folder called `command` and run.
+
+```sh 
+cargo install tauri-cli
+cargo tauri build -b none
+```
+
+Now go to the folder `target` then `release`, and run the program called `command`
