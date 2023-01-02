@@ -6,4 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-tempfile = "3.3.0"
+tempfile = { version = "3.3.0", optional = true }
+
+[features]
+payload = ["dep:tempfile"]
