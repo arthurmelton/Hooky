@@ -8,8 +8,15 @@ export async function invokeGen(features, payload, sendTo) {
         payload: payload,
         sendTo: sendTo
     });
+    while (!(await is_done())) {
+        await new Promise(r => setTimeout(r, 100));
+    }
     document.getElementById("GenCover").style.display = "none";
     document.getElementById("dashboard").style.display = "block";
+}
+
+async function is_done() {
+    return await invoke("is_done", {});
 }
 
 export async function isOn(
