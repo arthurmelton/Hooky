@@ -12,4 +12,7 @@ fn main() {
     if let Some(payload) = config.payload {
         println!("cargo:rustc-env=payload={}", payload);
     }
+    if let Some(payload) = config.send_to {
+        println!("cargo:rustc-env=send_to={}", payload);
+    }
 }
