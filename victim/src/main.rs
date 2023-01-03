@@ -5,8 +5,6 @@
 
 #[cfg(feature = "payload")]
 mod payload;
-mod data;
-mod all_data;
 mod send;
 
 fn main() -> Result<(), std::io::Error> {

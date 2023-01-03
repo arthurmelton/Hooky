@@ -56,6 +56,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "data"
+version = "0.1.0"
+dependencies = [
+ "fancy-regex",
+ "serde",
+ "serde_derive",
+]
+
+[[package]]
 name = "fancy-regex"
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -211,7 +220,7 @@ version = "0.1.0"
 dependencies = [
  "bincode",
  "config",
- "fancy-regex",
+ "data",
  "serde",
  "serde_derive",
  "tempfile",
