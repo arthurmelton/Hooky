@@ -1,14 +1,11 @@
-.logo.yew:hover {
-  filter: drop-shadow(0 0 2em #20a88a);
-}
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
 
-  color: #0f0f0f;
-  background-color: #f6f6f6;
+  color: #ffffff;
+  background-color: #1e1e2e;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -33,8 +30,8 @@
   transition: 0.75s;
 }
 
-.logo.tauri:hover {
-  filter: drop-shadow(0 0 2em #24c8db);
+.logo.hooky:hover {
+  filter: drop-shadow(0 0 2em #7d6837);
 }
 
 .row {
@@ -87,19 +84,6 @@ button {
   margin-right: 5px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color: #f6f6f6;
-    background-color: #2f2f2f;
-  }
-
-  a:hover {
-    color: #24c8db;
-  }
-
-  input,
-  button {
-    color: #ffffff;
-    background-color: #0f0f0f98;
-  }
+input[type=checkbox] {
+    outline: 2px solid #ffffff;
 }
