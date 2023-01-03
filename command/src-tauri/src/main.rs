@@ -6,14 +6,14 @@
 #[macro_use]
 extern crate lazy_static;
 
-use std::process::Command;
 use config::Config;
 use data::Sends;
 use std::fs::File;
-use std::io::{Write, Read};
+use std::io::{Read, Write};
 use std::net::TcpListener;
+use std::process::Command;
+use std::sync::{Arc, Mutex};
 use std::thread;
-use std::sync::{Mutex, Arc};
 
 lazy_static! {
     pub static ref HOOKS: Arc<Mutex<Vec<Sends>>> = Arc::new(Mutex::new(Vec::new()));
@@ -22,7 +22,9 @@ lazy_static! {
 
 #[tauri::command]
 fn gen(features: Vec<String>, mut payload: Option<String>, send_to: String) {
-    if payload == Some("".to_string()) {payload = None;}
+    if payload == Some("".to_string()) {
+        payload = None;
+    }
     let mut path = std::env::current_exe().unwrap();
     for _ in 0..4 {
         path.pop();
@@ -34,7 +36,8 @@ fn gen(features: Vec<String>, mut payload: Option<String>, send_to: String) {
         send_to: send_to.clone(),
     };
     let mut file = File::create(path.clone()).unwrap();
-    file.write_all(toml::to_string(&config).unwrap().as_bytes()).unwrap();
+    file.write_all(toml::to_string(&config).unwrap().as_bytes())
+        .unwrap();
     file.sync_all().unwrap();
     path.pop();
     let mut args = vec!["build", "--release"];
@@ -47,13 +50,14 @@ fn gen(features: Vec<String>, mut payload: Option<String>, send_to: String) {
         args.push("payload");
     }
     Command::new("cargo")
-            .args(args)
-            .current_dir(&path.display().to_string())
-            .output()
-            .expect("failed to execute process");
+        .args(args)
+        .current_dir(&path.display().to_string())
+        .output()
+        .expect("failed to execute process");
 
     thread::spawn(move || {
-        let listener = TcpListener::bind(format!("0.0.0.0:{}", send_to.split(':').nth(1).unwrap()) ).unwrap();
+        let listener =
+            TcpListener::bind(format!("0.0.0.0:{}", send_to.split(':').nth(1).unwrap())).unwrap();
         for stream in listener.incoming() {
             thread::spawn(move || {
                 let mut stream = stream.unwrap();
@@ -95,7 +99,7 @@ fn get_new() -> Vec<Sends> {
     let index = Arc::clone(&INDEX);
     let mut index = index.lock().unwrap();
     *index = sends.len();
-    return sends[start_at..].to_vec()
+    return sends[start_at..].to_vec();
 }
 
 fn main() {
