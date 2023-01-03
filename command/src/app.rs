@@ -48,7 +48,21 @@ pub fn app() -> Html {
     let mut id = 0;
 
     html! {
-        <main class="container">
+        <>
+        <div id={"GenCover"}>
+            <div id={"loading"}>    
+                <img src="/public/loading.svg" width="200px" height="200px" />
+            </div>
+        </div>
+        <div class="container" id={"dashboard"}>
+            <div class="row">
+                <img src="public/hooky.svg" class="logo hooky" alt="Hooky"/>
+            </div>
+            <p>{"The executable for you to share:"}</p>
+            <pre id={"victim_exe"}></pre>
+            <div id={"victims"}></div>
+        </div>
+        <div class="container" id={"setup"}>
             <div class="row">
                 <img src="public/hooky.svg" class="logo hooky" alt="Hooky"/>
             </div>
@@ -58,7 +72,7 @@ pub fn app() -> Html {
             <button type="button" onclick={payload_button}>{"Open"}</button>
             
             <label for={"ip"}>{"Ip / Domain to send the data to"}</label>
-            <input type="text" value={"1.1.1.1"} id={"ip"} />
+            <input type="text" value={"0.0.0.0"} id={"ip"} />
             
             <label for={"port"}>{"Port to send the data to"}</label>
             <input type="number" value={13337} id={"port"} />
@@ -74,6 +88,8 @@ pub fn app() -> Html {
             <div class="row" style="margin-top: 25px">
                 <button type="button" onclick={gen}>{"Generate"}</button>
             </div>
-        </main>
+        </div>
+        <script src="/public/main.js" />
+        </>
     }
 }

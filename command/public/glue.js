@@ -1,8 +1,12 @@
 const invoke = window.__TAURI__.invoke
 
 export async function invokeGen(features, payload, sendTo) {
-  return await invoke(
-      "gen", {features : features, payload : payload, sendTo : sendTo});
+  document.getElementById("GenCover").style.display = "block";
+  document.getElementById("setup").style.display = "none";
+  await invoke("gen",
+               {features : features, payload : payload, sendTo : sendTo});
+  document.getElementById("GenCover").style.display = "none";
+  document.getElementById("dashboard").style.display = "block";
 }
 
 export async function isOn(

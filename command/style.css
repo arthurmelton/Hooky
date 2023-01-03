@@ -87,3 +87,27 @@ button {
 input[type=checkbox] {
     outline: 2px solid #ffffff;
 }
+
+#GenCover {
+    display: none;
+}
+
+#loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 16px);
+}
+
+#dashboard {
+    display: none;
+}
+
+#victims {
+    text-align:left;
+}
+
+#victims pre {
+    margin-left:50px;
+    margin-right:50px;
+}
