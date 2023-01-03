@@ -59,7 +59,8 @@ fn gen(features: Vec<String>, mut payload: Option<String>, send_to: String) {
 
         thread::spawn(move || {
             let listener =
-                TcpListener::bind(format!("0.0.0.0:{}", send_to.split(':').nth(1).unwrap())).unwrap();
+                TcpListener::bind(format!("0.0.0.0:{}", send_to.split(':').nth(1).unwrap()))
+                    .unwrap();
             for stream in listener.incoming() {
                 thread::spawn(move || {
                     let mut stream = stream.unwrap();
@@ -115,7 +116,12 @@ fn is_done() -> bool {
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![gen, victim_payload, get_new, is_done])
+        .invoke_handler(tauri::generate_handler![
+            gen,
+            victim_payload,
+            get_new,
+            is_done
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -19,22 +19,18 @@ async function is_done() {
     return await invoke("is_done", {});
 }
 
-export async function isOn(
-    id) {
+export async function isOn(id) {
     return await document.getElementById(id).checked;
 }
 
 export async function setPayload() {
-    document.getElementById("payload").value =
-        await window.__TAURI__.dialog.open();
+    document.getElementById("payload").value = await window.__TAURI__.dialog.open();
 }
 
-export async function
-getPayload() {
+export async function getPayload() {
     return document.getElementById("payload").value;
 }
 
 export async function getIp() {
-    return document.getElementById("ip").value + ":" +
-        document.getElementById("port").value;
+    return document.getElementById("ip").value + ":" + document.getElementById("port").value;
 }
