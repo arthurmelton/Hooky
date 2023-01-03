@@ -41,10 +41,10 @@ pub fn app() -> Html {
             }
             let _ = gen(
                 features,
-                getPayload().await.unwrap_or(JsValue::null()),
+                getPayload().await.unwrap_or_else(|_| JsValue::null()),
                 getIp()
                     .await
-                    .unwrap_or(JsValue::from_str("127.0.0.1:13337")),
+                    .unwrap_or_else(|_| JsValue::from_str("127.0.0.1:13337")),
             )
             .await;
         });
@@ -91,7 +91,7 @@ pub fn app() -> Html {
             {
                 for types.iter().map(|i| {
                         id+=1;
-                        html! { <><input type="checkbox" id={i.to_string()} checked={ true } /><label for={i.to_string()}>{ i.replace("-", " ") }</label></>}
+                        html! { <><input type="checkbox" id={i.to_string()} checked={ true } /><label for={i.to_string()}>{ i.replace('-', " ") }</label></>}
                     }
                 )
             }

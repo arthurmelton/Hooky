@@ -93,7 +93,7 @@ fn victim_payload() -> String {
     for _ in 0..4 {
         path.pop();
     }
-    for i in vec!["victim", "target", "release", "victim"] {
+    for i in &["victim", "target", "release", "victim"] {
         path.push(i);
     }
     path.display().to_string()
@@ -106,12 +106,12 @@ fn get_new() -> Vec<Sends> {
     let index = Arc::clone(&INDEX);
     let mut index = index.lock().unwrap();
     *index = sends.len();
-    return sends[start_at..].to_vec();
+    sends[start_at..].to_vec()
 }
 
 #[tauri::command]
 fn is_done() -> bool {
-    (*DONE.lock().unwrap()).clone()
+    *DONE.lock().unwrap()
 }
 
 fn main() {
