@@ -67,7 +67,7 @@ pub fn app() -> Html {
         </div>
         <div class="container" id={"dashboard"}>
             <div class="row">
-                <img src="public/hooky.svg" class="logo hooky" alt="Hooky"/>
+                <img src="public/hooky.png" class="logo hooky" alt="Hooky"/>
             </div>
             <p>{"The executable for you to share:"}</p>
             <pre id={"victim_exe"}></pre>
@@ -75,7 +75,7 @@ pub fn app() -> Html {
         </div>
         <div class="container" id={"setup"}>
             <div class="row">
-                <img src="public/hooky.svg" class="logo hooky" alt="Hooky"/>
+                <img src="public/hooky.png" class="logo hooky" alt="Hooky"/>
             </div>
 
             <label for={"payload"}>{"Payload (Optional)"}</label>
