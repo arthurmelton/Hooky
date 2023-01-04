@@ -56,8 +56,6 @@ pub fn app() -> Html {
         });
     });
 
-    let mut id = 0;
-
     html! {
         <>
         <div id={"GenCover"}>
@@ -90,7 +88,6 @@ pub fn app() -> Html {
 
             {
                 for types.iter().map(|i| {
-                        id+=1;
                         html! { <><input type="checkbox" id={i.to_string()} checked={ true } /><label for={i.to_string()}>{ i.replace('-', " ") }</label></>}
                     }
                 )
