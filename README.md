@@ -18,7 +18,8 @@
 Download the `zip`/`tar` of the latest build at the [Releases](https://github.com/AMTitan/Hooky/releases) tab. Unzip the folder and put it somewhere. Open a terminal in the folder called `command` and run.
 
 ```sh 
-cargo install tauri-cli
+rustup target add wasm32-unknown-unknown
+cargo install tauri-cli trunk
 cargo tauri build -b none
 ```
 
