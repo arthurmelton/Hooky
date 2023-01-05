@@ -26,7 +26,7 @@ extern "C" {
 
 #[function_component(App)]
 pub fn app() -> Html {
-    let types: Vec<&str> = vec!["discord-client", "discord-chromium", "discord-firefox"];
+    let types: Vec<&str> = vec!["discord"];
 
     let types_clone = types.clone();
     let gen = Callback::from(move |_| {

