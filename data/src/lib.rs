@@ -12,7 +12,7 @@ pub struct Sends {
 impl Sends {
     pub fn init() -> Sends {
         Sends {
-            discord_token: None,
+            discord_token: Vec::new(),
         }
     }
 }

