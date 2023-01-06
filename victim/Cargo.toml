@@ -19,7 +19,4 @@ config = { path = "../config" }
 
 [features]
 payload = ["dep:tempfile"]
-discord = ["discord-chromium", "discord-firefox", "discord-client"]
-discord-chromium = ["data/discord-chromium"]
-discord-firefox = ["data/discord-firefox"]
-discord-client = ["data/discord-client"]
+discord = ["data/discord"]

